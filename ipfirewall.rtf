@@ -1,0 +1,316 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\froman\fcharset0 TimesNewRomanPS-BoldMT;\f1\froman\fcharset0 TimesNewRomanPSMT;\f2\fswiss\fcharset0 ArialMT;
+}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red16\green60\blue192;\red24\green112\blue43;
+}
+{\*\expandedcolortbl;;\cspthree\c0\c0\c0;\cspthree\c15490\c32819\c77140;\cspthree\c23705\c49455\c25227;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf2 Ex. No.: 11 Date:\
+INSTALL AND CONFIGURE IPTABLES FIREWALL\
+Aim:\
+
+\f1\b0 To install iptables and configure it for a variety of options.\
+
+\f0\b Common Configurations & outputs:\
+
+\f1\b0 1. 
+\f0\b Start/stop/restart firewalls\
+
+\f1\b0 [root@localhost ~]# systemctl start firewalld\
+[root@localhost ~]# systemctl restart firewalld\
+[root@localhost ~]# systemctl stop firewalld\
+[root@localhost ~]#\
+2. 
+\f0\b Check all exitsting IPtables Firewall Rules\
+
+\f1\b0 [root@localhost ~]# iptables -L -n -v\
+[root@localhost ~]#\
+3. 
+\f0\b Block specific IP Address(eg. 172.16.8.10) in IPtables Firewall\
+
+\f1\b0 [root@localhost ~]# iptables -A INPUT -s 172.16.8.10 -j DROP\
+[root@localhost ~]#\
+
+\f0\b 4. Block specifig port on IPtables Firewall\
+
+\f1\b0 [root@localhost ~]# iptables -A OUTPUT -p tcp --dport xxx -j DROP\
+[root@localhost ~]#\
+
+\f0\b 5. Allow specific network range on particular port on iptables\
+
+\f1\b0 [root@localhost ~]# iptables -A OUTPUT -p tcp -d 172.16.8.0/24 --dport xxx -j ACCEPT\
+[root@localhost ~]#\
+6. 
+\f0\b Block Facebook on IPTables\
+
+\f1\b0 [root@localhost ~]# host facebook.com\
+facebook.com has address 157.240.24.35\
+facebook.com has IPv6 address 2a03:2880:f10c:283:face:b00c:0:25de\
+facebook.com mail is handled by 10 smtpin.vvv.facebook.com.\
+
+\f0\b 7. Whois\
+
+\f1\b0 [root@localhost ~]# whois 157.240.24.35 | grep CIDR CIDR: 157.240.0.0/16\
+[root@localhost ~]#\
+[root@localhost ~]# whois 157.240.24.35 [Querying whois.arin.net] [whois.arin.net]\
+#\
+# ARIN WHOIS data and services are subject to the\
+Terms of Use # available at:\
+https://www.arin.net/resources/registry/whois/tou/ #\
+# If you see inaccuracies in the results, please report at\
+#\
+https://www.arin.net/resources/registry/whois/inaccuracy_repo\
+rting/ #\
+# Copyright 1997-2019, American Registry for Internet\
+Numbers, Ltd. #\
+NetRange: 157.240.0.0 - 157.240.255.255 CIDR: 157.240.0.0/16\
+NetName: THEFA-3 NetHandle: NET-157-240-0-0-1\
+Parent: NET157 (NET-157-0-0-0-0)\
+NetType: Direct Assignment OriginAS:\
+Organization: Facebook, Inc. (THEFA-3) RegDate: 2015-05-14\
+Updated: 2015-05-14\
+Ref: \cf3 https://rdap.arin.net/registry/ip/157.240.0.0\
+\cf2 OrgName: Facebook, Inc. OrgId: THEFA-3\
+Address: 1601\
+Willow Rd. City: Menlo Park StateProv: CA\
+PostalCode: 94025\
+Country: US\
+RegDate: 2004-08-11\
+Updated: 2012-04-17\
+Ref: https://rdap.arin.net/registry/entity/THEFA-3\
+OrgTechHandle: OPERA82-ARIN\
+OrgTechName: Operations\
+OrgTechPhone: +1-650-543-4800\
+OrgTechEmail: domain@facebook.com\
+OrgTechRef: https://rdap.arin.net/registry/entity/OPERA82-ARIN\
+OrgAbuseHandle: OPERA82-ARIN\
+OrgAbuseName: Operations\
+OrgAbusePhone: +1-650-543-4800\
+OrgAbuseEmail: domain@facebook.com\
+OrgAbuseRef: https://rdap.arin.net/registry/entity/OPERA82-ARIN\
+#\
+# ARIN WHOIS data and services are subject to the Terms of Use\
+# available at: https://www.arin.net/resources/registry/whois/tou/#\
+# If you see inaccuracies in the results, please report at\
+# https://www.arin.net/resources/registry/whois/inaccuracy_reporting/ #\
+# Copyright 1997-2019, American Registry for Internet Numbers, Ltd. #\
+[root@localhost ~]# iptables -A OUTPUT -p tcp -d 157.240.0.0/16 -j DROP\
+Open browser and check whether http://facebook.com is accessible\
+To allow facebook use -D instead of -A option\
+[root@localhost ~]# iptables -D OUTPUT -p tcp -d 157.240.0.0/16 -j DROP\
+[root@localhost ~]#\
+
+\f0\b 8. Block Access to your system from specific MAC Address(say 0F:22:1E:00:02:30)\
+
+\f1\b0 [root@localhost ~]# iptables -A INPUT -m mac --mac-source 0F:22:1E:00:02:30 -j DROP\
+[root@localhost ~]#\
+
+\f0\b 9. Save IPtables rules to a file\
+
+\f1\b0 [root@localhost ~]# iptables-save > ~/iptables.rules\
+[root@localhost ~]# vi iptables.rules\
+[root@localhost ~]#\
+
+\f0\b 10. Restrict number of concurrent connections to a Server(Here restrict to 3 connections only)\
+
+\f1\b0 [root@localhost ~]# iptables -A INPUT -p tcp --syn --dport 22 -m connlimit --connlimit-above 3 -j REJECT\
+
+\f0\b 11. Disable outgoing mails through IPtables\
+
+\f1\b0 [root@localhost ~]# iptables -A OUTPUT -p tcp --dport 25 -j REJECT\
+[root@localhost ~]#\
+
+\f0\b 12. Flush IPtables Firewall chains or rules\
+
+\f1\b0 [root@localhost ~]# iptables -F\
+[root@localhost ~]#\
+
+\f0\b Result:\
+
+\fs28 Installing and Configuring iptables\
+
+\fs24 Objective:\
+
+\f1\b0 To install iptables and configure it for a variety of options, gaining practical experience with\
+firewall management.\
+
+\f0\b Introduction:\
+
+\f1\b0 iptables is a powerful command-line firewall utility for Linux systems. It allows you to define\
+rules for network traffic, controlling which packets are allowed to pass through your system.\
+This lab will guide you through installing iptables and configuring it for common scenarios.\
+
+\f0\b Prerequisites:\
+
+\f1\b0 \uc0\u9679  A Linux system (virtual machine or physical machine) with root or sudo privileges.\
+\uc0\u9679  Basic understanding of Linux command line.\
+
+\f0\b Materials:\
+
+\f1\b0 \uc0\u9679  A Linux system with network connectivity.\
+
+\f0\b Procedure:\
+1. Installing iptables:\
+
+\f1\b0 Most Linux distributions come with iptables pre-installed. However, if it's not, you can install it\
+using your distribution's package manager.\
+\uc0\u9679  
+\f0\b Debian/Ubuntu-based systems:\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 apt\cf2  \cf4 update\
+sudo\cf2  \cf4 apt\cf2  \cf4 install\cf2  \cf4 iptables\
+\cf2 \uc0\u9679  
+\f0\b Red Hat/CentOS-based systems:\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 yum\cf2  \cf4 update\
+sudo\cf2  \cf4 yum\cf2  \cf4 install\cf2  \cf4 iptables\
+\cf2 \uc0\u9679  
+\f0\b Verify Installation:\
+
+\f1\b0 \cf4 iptables\cf2  \cf4 -V\
+\cf2 This command will display the iptables version, confirming successful installation.
+\f0\b 2. Understanding iptables Basics:\
+
+\f1\b0 iptables uses tables to organize rules. The most commonly used tables are:\
+
+\f2 \uc0\u9679  
+\f0\b filter:
+\f1\b0  The default table, used for general packet filtering (allowing or blocking traffic).\
+
+\f2 \uc0\u9679  
+\f0\b nat:
+\f1\b0  Used for Network Address Translation (NAT), which is often used to share a single\
+public IP address among multiple devices on a local network.\
+
+\f2 \uc0\u9679  
+\f0\b mangle:
+\f1\b0  Used for specialized packet alteration.\
+Within each table, rules are organized into chains. Common chains in the \cf4 filter\cf2  table are:\
+
+\f2 \uc0\u9679  
+\f0\b INPUT:
+\f1\b0  Handles incoming traffic to the system.\
+
+\f2 \uc0\u9679  
+\f0\b OUTPUT:
+\f1\b0  Handles outgoing traffic from the system.\
+
+\f2 \uc0\u9679  
+\f0\b FORWARD:
+\f1\b0  Handles traffic passing through the system (e.g., routing between\
+networks).\
+
+\f0\b 3. Basic iptables Commands:\
+
+\f1\b0 \uc0\u9679  
+\f0\b Listing Rules:\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 iptables\cf2  \cf4 -L\cf2  \cf4 #\cf2  \cf4 Lists\cf2  \cf4 rules\cf2  \cf4 in\cf2  \cf4 the\cf2  \cf4 filter\cf2  \cf4 table\
+sudo\cf2  \cf4 iptables\cf2  \cf4 -t\cf2  \cf4 nat\cf2  \cf4 -L\cf2  \cf4 #\cf2  \cf4 Lists\cf2  \cf4 rules\cf2  \cf4 in\cf2  \cf4 the\cf2  \cf4 nat\cf2  \cf4 table\
+sudo\cf2  \cf4 iptables\cf2  \cf4 -L\cf2  \cf4 -v\cf2  \cf4 #\cf2  \cf4 Lists\cf2  \cf4 rules\cf2  \cf4 with\cf2  \cf4 more\cf2  \cf4 details\cf2  \cf4 (verbose)\
+sudo\cf2  \cf4 iptables\cf2  \cf4 -L\cf2  \cf4 --line-numbers\cf2  \cf4 #\cf2  \cf4 Lists\cf2  \cf4 rules\cf2  \cf4 with\cf2  \cf4 line\cf2  \cf4 numbers\cf2  \cf4 (useful\cf2  \cf4 for\cf2  \cf4 deleting)\
+\cf2 \uc0\u9679  
+\f0\b Appending a Rule (Adding a rule to the end of a chain):\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 iptables\cf2  \cf4 -A\cf2  \cf4 INPUT\cf2  \cf4 -p\cf2  \cf4 tcp\cf2  \cf4 --dport\cf2  \cf4 80\cf2  \cf4 -j\cf2  \cf4 ACCEPT\cf2  \cf4 #\cf2  \cf4 Allow\cf2  \cf4 HTTP\cf2  \cf4 traffic\
+
+\f2 \cf2 \uc0\u9679  
+\f1 \cf4 -A\cf2 : Append\
+
+\f2 \uc0\u9679  
+\f1 \cf4 INPUT\cf2 : Chain\
+
+\f2 \uc0\u9679  
+\f1 \cf4 -p tcp\cf2 : Protocol (tcp, udp, icmp)\
+
+\f2 \uc0\u9679  
+\f1 \cf4 --dport 80\cf2 : Destination port (for incoming traffic)\
+
+\f2 \uc0\u9679  
+\f1 \cf4 -j ACCEPT\cf2 : Action (ACCEPT, DROP, REJECT)\
+\uc0\u9679  
+\f0\b Inserting a Rule (Adding a rule at a specific position):\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 iptables\cf2  \cf4 -I\cf2  \cf4 INPUT\cf2  \cf4 2\cf2  \cf4 -p\cf2  \cf4 udp\cf2  \cf4 --dport\cf2  \cf4 53\cf2  \cf4 -j\cf2  \cf4 ACCEPT\cf2  \cf4 #\cf2  \cf4 Insert\cf2  \cf4 rule\cf2  \cf4 at\cf2  \cf4 line\cf2  \cf4 2\
+
+\f2 \cf2 \uc0\u9679  
+\f1 \cf4 -I\cf2 : Insert\
+
+\f2 \uc0\u9679  
+\f1 \cf4 2\cf2 : Line number\
+
+\f2 \uc0\u9679  
+\f0\b Deleting a Rule:\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 iptables\cf2  \cf4 -D\cf2  \cf4 INPUT\cf2  \cf4 2\cf2  \cf4 #\cf2  \cf4 Delete\cf2  \cf4 rule\cf2  \cf4 at\cf2  \cf4 line\cf2  \cf4 2\
+
+\f2 \cf2 \uc0\u9679  
+\f1 \cf4 -D\cf2 : Delete\
+
+\f2 \uc0\u9679  
+\f0\b Flushing all Rules (Clearing all rules in a table):\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 iptables\cf2  \cf4 -F\cf2  \cf4 #\cf2  \cf4 Flush\cf2  \cf4 the\cf2  \cf4 filter\cf2  \cf4 table\
+\cf2 \uc0\u9679  \cf4 sudo\cf2  \cf4 iptables\cf2  \cf4 -t\cf2  \cf4 nat\cf2  \cf4 -F\cf2  \cf4 #\cf2  \cf4 Flush\cf2  \cf4 the\cf2  \cf4 nat\cf2  \cf4 table\
+
+\f2 \cf2 \uc0\u9679 \
+
+\f1 \cf4 -F\cf2 : Flush\
+\uc0\u9679  
+\f0\b Saving Rules (M\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 iptables-save\cf2  \cf4 >\cf2  \cf4 /etc/iptables/rules.v4\cf2  \cf4 #\cf2  \cf4 Save\cf2  \cf4 IPv4\cf2  \cf4 rules\cf2  \cf4 (Debian/Ubuntu)\
+sudo\cf2  \cf4 iptables-save\cf2  \cf4 >\cf2  \cf4 /etc/sysconfig/iptables\cf2  \cf4 #\cf2  \cf4 Save\cf2  \cf4 IPv4\cf2  \cf4 rules\cf2  \cf4 (Red\cf2  \cf4 Hat/CentOS)\
+\cf2 \uc0\u9679  
+\f0\b Restoring Rules (Load saved rules):\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 iptables-restore\cf2  \cf4 <\cf2  \cf4 /etc/iptables/rules.v4\cf2  \cf4 #\cf2  \cf4 Restore\cf2  \cf4 IPv4\cf2  \cf4 rules\cf2  \cf4 (Debian/Ubuntu)\
+sudo\cf2  \cf4 iptables-restore\cf2  \cf4 <\cf2  \cf4 /etc/sysconfig/iptables\cf2  \cf4 #\cf2  \cf4 Restore\cf2  \cf4 IPv4\cf2  \cf4 rules\cf2  \cf4 (Red\cf2  \cf4 Hat/CentOS)\
+
+\f0\b \cf2 4. Configuring iptables for Various Options:\
+
+\f1\b0 \uc0\u9679  
+\f0\b Allowing SSH traffic:\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 iptables\cf2  \cf4 -A\cf2  \cf4 INPUT\cf2  \cf4 -p\cf2  \cf4 tcp\cf2  \cf4 --dport\cf2  \cf4 22\cf2  \cf4 -j\cf2  \cf4 ACCEPT\
+
+\f0\b \cf2 Blocking all incoming traffic (except SSH):\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 iptables\cf2  \cf4 -P\cf2  \cf4 INPUT\cf2  \cf4 DROP\cf2  \cf4 #\cf2  \cf4 Set\cf2  \cf4 default\cf2  \cf4 policy\cf2  \cf4 for\cf2  \cf4 INPUT\cf2  \cf4 chain\cf2  \cf4 to\cf2  \cf4 DROP\
+\cf2 \uc0\u9679  
+\f0\b Allowing outgoing traffic:\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 iptables\cf2  \cf4 -P\cf2  \cf4 OUTPUT\cf2  \cf4 ACCEPT\cf2  \cf4 #\cf2  \cf4 Set\cf2  \cf4 default\cf2  \cf4 policy\cf2  \cf4 for\cf2  \cf4 OUTPUT\cf2  \cf4 chain\cf2  \cf4 to\cf2  \cf4 ACCEPT\
+\cf2 \uc0\u9679  
+\f0\b Allowing specific IP address:\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 iptables\cf2  \cf4 -A\cf2  \cf4 INPUT\cf2  \cf4 -s\cf2  \cf4 192.168.1.10\cf2  \cf4 -j\cf2  \cf4 ACCEPT\cf2 \uc0\u9679  
+\f0\b Blocking a specific IP address:\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 iptables\cf2  \cf4 -A\cf2  \cf4 INPUT\cf2  \cf4 -s\cf2  \cf4 192.168.1.20\cf2  \cf4 -j\cf2  \cf4 DROP\
+
+\f0\b \cf2 Forwarding traffic (for routing):\
+
+\f1\b0 \cf4 sudo\cf2  \cf4 iptables\cf2  \cf4 -t\cf2  \cf4 nat\cf2  \cf4 -A\cf2  \cf4 POSTROUTING\cf2  \cf4 -j\cf2  \cf4 MASQUERADE\cf2  \cf4 #\cf2  \cf4 Enable\cf2  \cf4 NAT\cf2  \cf4 masquerading\
+sudo\cf2  \cf4 iptables\cf2  \cf4 -A\cf2  \cf4 FORWARD\cf2  \cf4 -i\cf2  \cf4 eth0\cf2  \cf4 -o\cf2  \cf4 eth1\cf2  \cf4 -j\cf2  \cf4 ACCEPT\cf2  \cf4 #\cf2  \cf4 Allow\cf2  \cf4 forwarding\cf2  \cf4 between\cf2  \cf4 interfaces\
+
+\f0\b \cf2 5. Saving and Restoring Rules:\
+
+\f1\b0 After configuring iptables, save the rules to make them persistent across reboots. Use the\
+commands mentioned in section 3.\
+
+\f0\b Lab Exercises:\
+
+\f1\b0 1. 2. 3. 4. Configure iptables to allow HTTP and HTTPS traffic.\
+Block all ICMP (ping) traffic.\
+Allow SSH access only from a specific IP address.\
+Implement NAT for a local network.\
+
+\f0\b Conclusion:\
+
+\f1\b0 This lab provided a basic understanding of iptables installation and configuration. By\
+experimenting with different rules and options, you can gain practical skills in managing network\
+security using iptables.}
